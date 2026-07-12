@@ -1,0 +1,2 @@
+import {redirect} from "next/navigation";import {getSession} from "@/lib/auth";import {Sidebar} from "@/components/sidebar";import {Header} from "@/components/header";
+export default async function AdminLayout({children}:{children:React.ReactNode}){const session=await getSession();if(!session)redirect("/login");if(session.role!=="ADMIN")redirect("/portal");return <div><Sidebar admin/><div className="lg:pl-64"><Header admin name={session.name.split(" ")[0]}/><main className="mx-auto max-w-7xl p-4 md:p-8">{children}</main></div></div>}

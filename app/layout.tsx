@@ -1,0 +1,4 @@
+import type {Metadata,Viewport} from "next";import "./globals.css";import {Toaster} from "sonner";import {PwaRegister} from "@/components/pwa-register";
+export const metadata:Metadata={title:"Sanico Teles | Portal do Aluno",description:"Portal acadêmico da Escola Estadual Sanico Teles",manifest:"/manifest.webmanifest",applicationName:"Portal Sanico Teles",appleWebApp:{capable:true,statusBarStyle:"default",title:"Sanico Teles"},icons:{icon:"/brand/sanico-teles-logo.png",apple:"/brand/sanico-teles-logo.png"},formatDetection:{telephone:false}};
+export const viewport:Viewport={themeColor:[{media:"(prefers-color-scheme: light)",color:"#3157d5"},{media:"(prefers-color-scheme: dark)",color:"#0c1120"}],width:"device-width",initialScale:1,viewportFit:"cover"};
+export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="pt-BR" suppressHydrationWarning><body><PwaRegister/>{children}<Toaster richColors position="top-right"/></body></html>}

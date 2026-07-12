@@ -1,0 +1,3 @@
+import {describe,expect,it} from "vitest";import {eventSchema,loginSchema,profileSchema} from "../lib/validation";
+describe("validação de autenticação",()=>{it("aceita credenciais válidas",()=>expect(loginSchema.safeParse({email:"aluno@escola.com",password:"Portal@123"}).success).toBe(true));it("rejeita senha curta",()=>expect(loginSchema.safeParse({email:"aluno@escola.com",password:"123"}).success).toBe(false))});
+describe("validação de domínio",()=>{it("valida evento",()=>expect(eventSchema.safeParse({title:"Feira",description:"Descrição completa",location:"Ginásio",capacity:30}).success).toBe(true));it("protege formato do perfil",()=>expect(profileSchema.safeParse({email:"errado",phone:"1"}).success).toBe(false))});

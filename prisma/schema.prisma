@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model User {
+  id                 String              @id @default(cuid())
+  name               String
+  email              String              @unique
+  passwordHash       String
+  role               Role                @default(STUDENT)
+  avatarUrl          String?
+  phone              String?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  studentProfile     StudentProfile?
+  eventRegistrations EventRegistration[]
+  clubMemberships    ClubMembership[]
+  notifications      Notification[]
+  news               News[]              @relation("NewsAuthor")
+
+  @@index([role])
+}
+
+model StudentProfile {
+  id           String @id @default(cuid())
+  userId       String @unique
+  registration String @unique
+  course       String
+  className    String
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Event {
+  id            String              @id @default(cuid())
+  title         String
+  slug          String              @unique
+  description   String
+  imageUrl      String?
+  startsAt      DateTime
+  endsAt        DateTime?
+  location      String
+  category      String
+  capacity      Int?
+  status        ContentStatus       @default(DRAFT)
+  registrations EventRegistration[]
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@index([startsAt, status])
+}
+
+model EventRegistration {
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String
+  createdAt DateTime @default(now())
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@index([userId])
+}
+
+model Club {
+  id           String           @id @default(cuid())
+  name         String
+  slug         String           @unique
+  description  String
+  imageUrl     String?
+  leader       String
+  meetingInfo  String
+  category     String
+  memberLimit  Int?
+  memberships  ClubMembership[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+model ClubMembership {
+  id       String   @id @default(cuid())
+  clubId   String
+  userId   String
+  joinedAt DateTime @default(now())
+  club     Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([clubId, userId])
+  @@index([userId])
+}
+
+model CalendarEntry {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  startsAt    DateTime
+  endsAt      DateTime?
+  type        String
+  location    String?
+  createdAt   DateTime @default(now())
+
+  @@index([startsAt, type])
+}
+
+model News {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  summary     String
+  content     String
+  imageUrl    String?
+  category    String
+  status      ContentStatus @default(DRAFT)
+  pinned      Boolean       @default(false)
+  publishedAt DateTime?
+  authorId    String
+  author      User          @relation("NewsAuthor", fields: [authorId], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([status, publishedAt])
+}
+
+model Menu {
+  id        String     @id @default(cuid())
+  weekStart DateTime   @unique
+  items     MenuItem[]
+  createdAt DateTime   @default(now())
+}
+
+model MenuItem {
+  id          String   @id @default(cuid())
+  menuId      String
+  date        DateTime
+  mealType    String
+  name        String
+  ingredients String?
+  allergens   String?
+  tags        String[]
+  menu        Menu     @relation(fields: [menuId], references: [id], onDelete: Cascade)
+
+  @@index([date])
+}
+
+model ClassSchedule {
+  id        String @id @default(cuid())
+  className String
+  weekday   Int
+  startsAt  String
+  endsAt    String
+  subject   String
+  teacher   String
+  room      String
+
+  @@index([className, weekday])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  link      String?
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+}

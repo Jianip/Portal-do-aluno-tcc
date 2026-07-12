@@ -1,0 +1,2 @@
+import {getSession} from "@/lib/auth";import {PageTitle} from "@/components/page-title";import {ProfileCustomizer} from "@/components/profile-customizer";
+export default async function Perfil(){const session=await getSession();return <><PageTitle eyebrow="Sua conta" title="Meu perfil" description="Personalize sua foto, informações de contato e preferências."/><ProfileCustomizer userId={session?.id||"local"} initialName={session?.name||"Lucas Ferreira"} initialEmail={session?.email||"aluno@escolafuturo.edu.br"}/></>}

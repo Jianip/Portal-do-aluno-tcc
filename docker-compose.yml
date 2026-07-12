@@ -1,0 +1,11 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: portal
+      POSTGRES_PASSWORD: portal
+      POSTGRES_DB: portal_aluno
+    ports: ["5432:5432"]
+    volumes: [portal_data:/var/lib/postgresql/data]
+volumes:
+  portal_data:

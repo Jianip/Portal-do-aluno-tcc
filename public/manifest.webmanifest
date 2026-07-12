@@ -1,0 +1,22 @@
+{
+  "name": "Portal do Aluno — Sanico Teles",
+  "short_name": "Sanico Teles",
+  "description": "Portal acadêmico da Escola Estadual Sanico Teles",
+  "start_url": "/portal",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f7fb",
+  "theme_color": "#3157d5",
+  "lang": "pt-BR",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {"src": "/brand/sanico-teles-logo.png", "sizes": "any", "type": "image/png", "purpose": "any"},
+    {"src": "/brand/sanico-teles-logo.png", "sizes": "any", "type": "image/png", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "Calendário", "short_name": "Calendário", "url": "/portal/calendario"},
+    {"name": "Horários", "short_name": "Horários", "url": "/portal/horarios"},
+    {"name": "Cardápio", "short_name": "Cardápio", "url": "/portal/cardapio"}
+  ]
+}
